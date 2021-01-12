@@ -70,7 +70,7 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
     User.destroy({
         where: {
-            id: req.body.params
+            id: req.params.id
         }
     })
     .then(dbUserData => {
