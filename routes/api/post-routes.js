@@ -7,6 +7,7 @@ router.get('/', (_req, res) => {
     Post.findAll({
         //Query Config
         attributes: ['id', 'post_url', 'title', 'created_at'],
+        order: [['created_at', 'DESC']],
         include: [
             {
                 model: User,
@@ -83,7 +84,29 @@ router.put('/:id', (req, res) => {
     .catch(err => {
         console.log(err);
         res.status(500).json(err);
+    });
+});
+
+//Delete a post
+router.delete('/:id', (req, res) => {
+    Post.destroy(
+        {
+            where: {
+                id: req.params.id
+            }
+        }
+    )
+    .then(dbPostData => {
+        if(!dbPostData) {
+            res.status(404).json({message: "Could not find a post with that id"})
+            return;
+        }
+        res.json(dbPostData);
     })
-})
+    .catch(err => {
+        console.log(err);
+        res.status(500).json(err);
+    });
+});
 
 module.exports = router;
